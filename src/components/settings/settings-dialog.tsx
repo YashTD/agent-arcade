@@ -28,8 +28,7 @@ const FIELDS: SettingsField[] = [
   {
     key: "OPENROUTER_API_KEY",
     label: "OpenRouter API Key",
-    type: "password",
-    placeholder: "sk-or-v1-abc123...",
+    type: "password"
   },
   {
     key: "ORCHESTRATOR_MODEL",
@@ -50,8 +49,7 @@ const FIELDS: SettingsField[] = [
   {
     key: "BRAVE_SEARCH_API_KEY",
     label: "Brave Search API Key",
-    type: "password",
-    placeholder: "BSAabcdef123...",
+    type: "password"
   },
   {
     key: "SCRATCHPAD_FILE_PATH",
