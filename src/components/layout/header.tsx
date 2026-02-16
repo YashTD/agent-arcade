@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { MessageSquare, Settings, Wrench, Gamepad2, Swords, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SettingsDialog } from "@/components/settings/settings-dialog";
+import { useSettings } from "@/hooks/use-settings";
 
 const navItems = [
   { href: "/conversations", label: "ARENA", icon: Swords, glow: "glow-cyan" },
@@ -16,6 +17,13 @@ const navItems = [
 export function Header() {
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { data: settings } = useSettings();
+
+  useEffect(() => {
+    if (settings && !settings.OPENROUTER_API_KEY) {
+      setSettingsOpen(true);
+    }
+  }, [settings]);
 
   return (
     <>
