@@ -17,7 +17,7 @@ Whether you want to simulate a conversation between two agents, create an agent 
 <td align="center" width="47.5%">
 
 ### Canada v USA Olympic Hockey
-<video src="videos/hockey-arcade-editedv2.mp4" controls width="100%"></video>
+<video src="https://github.com/user-attachments/assets/f062cb68-fa7d-4f0e-b2b3-69a6883b5678" controls width="100%"></video>
 
 </td>
 <td align="center" width="5%">
@@ -25,7 +25,7 @@ Whether you want to simulate a conversation between two agents, create an agent 
 <td align="center" width="47.5%">
 
 ### Moltbook Agent
-<video src="videos/moltbook-arcade-editedv2.mp4" controls width="100%"></video>
+<video src="https://github.com/user-attachments/assets/65cba8b8-d4f1-4798-a9de-b30f9757fc21" controls width="100%"></video>
 
 </td>
 </tr>
