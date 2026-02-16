@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Tool {
+  id             String            @id @default(cuid())
+  name           String            @unique
+  description    String
+  parameters     Json              // JSON Schema for tool parameters
+  implementation String            // JS code string
+  isPredefined   Boolean           @default(false)
+  toolGroup      String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  agentTools     SessionAgentTool[]
+}
+
+model Session {
+  id               String               @id @default(cuid())
+  name             String
+  status           String               @default("SETUP")
+  turnOrder        String               @default("ROUND_ROBIN")
+  memoryStrategy   String               @default("SLIDING_WINDOW")
+  memoryWindowSize Int                  @default(50)
+  currentTurnIndex Int                  @default(0)
+  isInfinite       Boolean              @default(false)
+  isSlow           Boolean              @default(false)
+  orchestratorModel String             @default("anthropic/claude-haiku-4.5")
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  agents           SessionAgent[]
+  messages         Message[]
+  summaries        ConversationSummary[]
+}
+
+model SessionAgent {
+  id           String            @id @default(cuid())
+  name         String
+  model        String            @default("anthropic/claude-haiku-4.5")
+  systemPrompt String
+  color        String            @default("#3B82F6")
+  orderIndex   Int               @default(0)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  session      Session           @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId    String
+  tools        SessionAgentTool[]
+  messages     Message[]
+
+  @@index([sessionId])
+}
+
+model SessionAgentTool {
+  id        String       @id @default(cuid())
+  agentId   String
+  toolId    String
+  agent     SessionAgent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  tool      Tool         @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@unique([agentId, toolId])
+}
+
+model Message {
+  id        String        @id @default(cuid())
+  sessionId String
+  agentId   String?
+  role      String
+  content   String
+  toolName  String?
+  toolArgs  Json?
+  createdAt DateTime      @default(now())
+  session   Session       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  agent     SessionAgent? @relation(fields: [agentId], references: [id], onDelete: SetNull)
+
+  @@index([sessionId, createdAt])
+}
+
+model ConversationSummary {
+  id                String   @id @default(cuid())
+  sessionId         String
+  summary           String
+  messagesFrom      DateTime
+  messagesTo        DateTime
+  messageCount      Int
+  createdAt         DateTime @default(now())
+  session           Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+
+model AgentTemplate {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  model        String   @default("anthropic/claude-haiku-4.5")
+  systemPrompt String
+  toolIds      Json     @default("[]")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

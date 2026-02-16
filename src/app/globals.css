@@ -1,0 +1,288 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+@layer base {
+  :root {
+    --background: 240 15% 5%;
+    --foreground: 120 100% 80%;
+    --card: 240 20% 8%;
+    --card-foreground: 120 100% 80%;
+    --popover: 240 20% 8%;
+    --popover-foreground: 120 100% 80%;
+    --primary: 300 100% 60%;
+    --primary-foreground: 240 15% 5%;
+    --secondary: 180 100% 40%;
+    --secondary-foreground: 240 15% 5%;
+    --muted: 240 15% 14%;
+    --muted-foreground: 120 40% 50%;
+    --accent: 50 100% 50%;
+    --accent-foreground: 240 15% 5%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 300 60% 30%;
+    --input: 240 20% 16%;
+    --ring: 300 100% 60%;
+    --radius: 0px;
+
+    --neon-green: 120 100% 50%;
+    --neon-pink: 320 100% 60%;
+    --neon-cyan: 180 100% 50%;
+    --neon-yellow: 50 100% 50%;
+    --neon-orange: 25 100% 55%;
+    --neon-blue: 220 100% 60%;
+    --neon-red: 0 100% 50%;
+    --neon-purple: 280 100% 60%;
+  }
+
+  .dark {
+    --background: 240 15% 3%;
+    --foreground: 120 100% 75%;
+    --card: 240 20% 6%;
+    --card-foreground: 120 100% 75%;
+    --popover: 240 20% 6%;
+    --popover-foreground: 120 100% 75%;
+    --primary: 300 100% 60%;
+    --primary-foreground: 240 15% 3%;
+    --secondary: 180 100% 40%;
+    --secondary-foreground: 240 15% 3%;
+    --muted: 240 15% 12%;
+    --muted-foreground: 120 40% 45%;
+    --accent: 50 100% 50%;
+    --accent-foreground: 240 15% 3%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 300 60% 25%;
+    --input: 240 20% 12%;
+    --ring: 300 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'VT323', monospace;
+    image-rendering: pixelated;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Press Start 2P', cursive;
+  }
+}
+
+/* ===== CRT SCANLINE OVERLAY ===== */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+/* ===== PIXEL GRID BACKGROUND ===== */
+.pixel-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 0, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ===== NEON GLOW EFFECTS ===== */
+.glow-green {
+  text-shadow: 0 0 5px hsl(120 100% 50%), 0 0 10px hsl(120 100% 50%), 0 0 20px hsl(120 100% 50%);
+}
+
+.glow-pink {
+  text-shadow: 0 0 5px hsl(300 100% 60%), 0 0 10px hsl(300 100% 60%), 0 0 20px hsl(300 100% 60%);
+}
+
+.glow-cyan {
+  text-shadow: 0 0 5px hsl(180 100% 50%), 0 0 10px hsl(180 100% 50%), 0 0 20px hsl(180 100% 50%);
+}
+
+.glow-yellow {
+  text-shadow: 0 0 5px hsl(50 100% 50%), 0 0 10px hsl(50 100% 50%), 0 0 20px hsl(50 100% 50%);
+}
+
+.glow-orange {
+  text-shadow: 0 0 5px hsl(25 100% 55%), 0 0 10px hsl(25 100% 55%), 0 0 20px hsl(25 100% 55%);
+}
+
+/* Box glow variants */
+.box-glow-pink {
+  box-shadow: 0 0 5px hsl(300 100% 60%), 0 0 10px hsl(300 100% 60% / 0.5), inset 0 0 5px hsl(300 100% 60% / 0.1);
+}
+
+.box-glow-cyan {
+  box-shadow: 0 0 5px hsl(180 100% 50%), 0 0 10px hsl(180 100% 50% / 0.5), inset 0 0 5px hsl(180 100% 50% / 0.1);
+}
+
+.box-glow-green {
+  box-shadow: 0 0 5px hsl(120 100% 50%), 0 0 10px hsl(120 100% 50% / 0.5), inset 0 0 5px hsl(120 100% 50% / 0.1);
+}
+
+.box-glow-yellow {
+  box-shadow: 0 0 5px hsl(50 100% 50%), 0 0 10px hsl(50 100% 50% / 0.5), inset 0 0 5px hsl(50 100% 50% / 0.1);
+}
+
+.box-glow-orange {
+  box-shadow: 0 0 5px hsl(25 100% 55%), 0 0 10px hsl(25 100% 55% / 0.5), inset 0 0 5px hsl(25 100% 55% / 0.1);
+}
+
+.box-glow-red {
+  box-shadow: 0 0 5px hsl(0 100% 50%), 0 0 10px hsl(0 100% 50% / 0.5), inset 0 0 5px hsl(0 100% 50% / 0.1);
+}
+
+.box-glow-blue {
+  box-shadow: 0 0 5px hsl(220 100% 60%), 0 0 10px hsl(220 100% 60% / 0.5), inset 0 0 5px hsl(220 100% 60% / 0.1);
+}
+
+/* ===== PIXEL BORDER ===== */
+.pixel-border {
+  border: 2px solid hsl(var(--border));
+  box-shadow:
+    inset -2px -2px 0 0 hsl(240 15% 20%),
+    inset 2px 2px 0 0 hsl(240 15% 30%);
+}
+
+.pixel-border-pink {
+  border: 2px solid hsl(300 100% 60%);
+  box-shadow:
+    inset -2px -2px 0 0 hsl(300 100% 35%),
+    inset 2px 2px 0 0 hsl(300 100% 75%);
+}
+
+.pixel-border-cyan {
+  border: 2px solid hsl(180 100% 50%);
+  box-shadow:
+    inset -2px -2px 0 0 hsl(180 100% 30%),
+    inset 2px 2px 0 0 hsl(180 100% 70%);
+}
+
+.pixel-border-green {
+  border: 2px solid hsl(120 100% 50%);
+  box-shadow:
+    inset -2px -2px 0 0 hsl(120 100% 30%),
+    inset 2px 2px 0 0 hsl(120 100% 70%);
+}
+
+.pixel-border-yellow {
+  border: 2px solid hsl(50 100% 50%);
+  box-shadow:
+    inset -2px -2px 0 0 hsl(50 100% 30%),
+    inset 2px 2px 0 0 hsl(50 100% 70%);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 20px currentColor;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+
+@keyframes arcade-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes pixel-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 20px; }
+}
+
+@keyframes rainbow-border {
+  0% { border-color: hsl(0 100% 60%); }
+  14% { border-color: hsl(25 100% 55%); }
+  28% { border-color: hsl(50 100% 50%); }
+  42% { border-color: hsl(120 100% 50%); }
+  57% { border-color: hsl(180 100% 50%); }
+  71% { border-color: hsl(220 100% 60%); }
+  85% { border-color: hsl(300 100% 60%); }
+  100% { border-color: hsl(0 100% 60%); }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.animate-neon-flicker {
+  animation: neon-flicker 2s infinite;
+}
+
+.animate-arcade-pulse {
+  animation: arcade-pulse 2s ease-in-out infinite;
+}
+
+.animate-rainbow-border {
+  animation: rainbow-border 4s linear infinite;
+}
+
+/* ===== ARCADE SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(240 15% 8%);
+  border-left: 2px solid hsl(300 60% 25%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(300 100% 40%);
+  border: 1px solid hsl(300 100% 60%);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(300 100% 55%);
+}
+
+/* ===== RETRO SELECTION ===== */
+::selection {
+  background: hsl(300 100% 60%);
+  color: hsl(240 15% 5%);
+}
+
+/* ===== ARCADE INSERT COIN CURSOR ===== */
+.arcade-cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  background: hsl(120 100% 50%);
+  animation: blink 0.7s step-end infinite;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+}
+
+/* ===== STAR FIELD (for empty states) ===== */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  animation: twinkle 2s ease-in-out infinite;
+}
