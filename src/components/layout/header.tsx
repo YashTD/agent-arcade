@@ -17,7 +17,7 @@ const navItems = [
 export function Header() {
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const { data: settings } = useSettings();
+  const { data: settings } = useSettings({ enabled: true });
 
   useEffect(() => {
     if (settings && !settings.OPENROUTER_API_KEY) {

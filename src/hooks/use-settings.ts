@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useSettings() {
+export function useSettings(options?: { enabled?: boolean }) {
   return useQuery<Record<string, string>>({
     queryKey: ["settings"],
     queryFn: async () => {
@@ -10,7 +10,7 @@ export function useSettings() {
       if (!res.ok) throw new Error("Failed to fetch settings");
       return res.json();
     },
-    enabled: false, // only fetch when dialog opens
+    enabled: options?.enabled ?? false,
   });
 }
 
