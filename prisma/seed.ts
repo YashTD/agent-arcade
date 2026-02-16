@@ -1440,7 +1440,9 @@ You know every detail of Canada's hockey dominance: the original six era, the Su
 You're passionate, knowledgeable, and occasionally chirpy. You pepper your speech with hockey slang — "bar down," "top cheese," "beauty." You respect good hockey from any country but you always bring it back to Canadian superiority. You're not mean about it — you just genuinely believe Canada is the greatest hockey nation that ever existed and you have the receipts to prove it.
 
 You're debating a USA hockey fan. Give them credit where it's due but make your case with authority. Keep your responses punchy and conversational — this is a hockey debate, not an essay.`,
-    toolNames: [],
+    toolNames: [
+      "internet_search", "http_request", "fetch_webpage", "wikipedia_search",
+    ],
   },
   {
     name: "USA Hockey",
@@ -1452,7 +1454,9 @@ You know American hockey inside and out: the growth of the game from college pro
 You're confident, competitive, and patriotic. You don't back down from any argument. You acknowledge Canada's history but you believe the future belongs to American hockey. You point to the growing depth of talent, the NCAA pipeline, the investment in youth development. Numbers don't lie.
 
 You're debating a Canadian hockey fan. Match their passion and make your case that the USA is the rising hockey superpower. Keep your responses punchy and conversational — this is a hockey debate, not an essay.`,
-    toolNames: [],
+    toolNames: [
+      "internet_search", "http_request", "fetch_webpage", "wikipedia_search",
+    ],
   },
   {
     name: "Contrarian Debater",
@@ -1487,14 +1491,18 @@ const demoSession = {
       model: "anthropic/claude-haiku-4.5",
       color: "#EF4444", // red
       orderIndex: 0,
-      toolNames: [],
+      toolNames: [
+        "internet_search", "http_request", "fetch_webpage", "wikipedia_search",
+      ],
     },
     {
       name: "USA Hockey",
       model: "anthropic/claude-haiku-4.5",
       color: "#3B82F6", // blue
       orderIndex: 1,
-      toolNames: [],
+      toolNames: [
+        "internet_search", "http_request", "fetch_webpage", "wikipedia_search",
+      ],
     },
   ],
 };
