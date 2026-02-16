@@ -21,6 +21,7 @@ interface SettingsField {
   type: "text" | "password";
   readOnly?: boolean;
   description?: string;
+  placeholder?: string;
 }
 
 const FIELDS: SettingsField[] = [
@@ -28,6 +29,7 @@ const FIELDS: SettingsField[] = [
     key: "OPENROUTER_API_KEY",
     label: "OpenRouter API Key",
     type: "password",
+    placeholder: "sk-or-v1-abc123...",
   },
   {
     key: "ORCHESTRATOR_MODEL",
@@ -49,6 +51,7 @@ const FIELDS: SettingsField[] = [
     key: "BRAVE_SEARCH_API_KEY",
     label: "Brave Search API Key",
     type: "password",
+    placeholder: "BSAabcdef123...",
   },
   {
     key: "SCRATCHPAD_FILE_PATH",
@@ -132,6 +135,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                   value={values[field.key] ?? ""}
                   onChange={(e) => handleChange(field.key, e.target.value)}
                   readOnly={field.readOnly}
+                  placeholder={field.placeholder}
                   className={field.readOnly ? "opacity-60" : ""}
                 />
                 {field.description && (
