@@ -40,7 +40,8 @@ export function formatMessagesForAgent(
     }
 
     if (msg.role === "TOOL_CALL" || msg.role === "TOOL_RESULT") {
-      // Include tool interactions as system context
+      // Only include tool interactions for the agent that made them
+      if (msg.agentId !== currentAgentId) continue;
       const prefix =
         msg.role === "TOOL_CALL"
           ? `[Tool Call - ${msg.toolName}]`
