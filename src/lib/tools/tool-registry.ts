@@ -6,6 +6,7 @@ import { toolLogger } from "./tool-logger";
 export interface ToolContext {
   sessionId: string;
   browserManager: import("./browser-manager").BrowserSessionManager;
+  requestRest?: () => void;
 }
 
 interface SDKTool {

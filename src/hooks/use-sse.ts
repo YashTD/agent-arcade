@@ -76,6 +76,7 @@ function handleEvent(
 
     case "conversation_complete":
     case "conversation_paused":
+    case "conversation_resting":
       store.setIsRunning(false);
       break;
   }

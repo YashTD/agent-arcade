@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
-import { Cpu, Brain, Repeat, Gauge } from "lucide-react";
+import { Cpu, Brain, Repeat, Gauge, Heart } from "lucide-react";
 
 interface ConversationControlsProps {
   turnOrder: string;
@@ -19,11 +19,13 @@ interface ConversationControlsProps {
   isInfinite: boolean;
   isSlow: boolean;
   orchestratorModel: string;
+  heartbeatInterval: number | null;
   onTurnOrderChange: (value: string) => void;
   onMemoryStrategyChange: (value: string) => void;
   onInfiniteChange: (value: boolean) => void;
   onSlowChange: (value: boolean) => void;
   onOrchestratorModelChange: (value: string) => void;
+  onHeartbeatIntervalChange: (value: number | null) => void;
   disabled?: boolean;
 }
 
@@ -33,19 +35,32 @@ export function ConversationControls({
   isInfinite,
   isSlow,
   orchestratorModel,
+  heartbeatInterval,
   onTurnOrderChange,
   onMemoryStrategyChange,
   onInfiniteChange,
   onSlowChange,
   onOrchestratorModelChange,
+  onHeartbeatIntervalChange,
   disabled,
 }: ConversationControlsProps) {
   const [localModel, setLocalModel] = useState(orchestratorModel);
+  const [localHeartbeat, setLocalHeartbeat] = useState(heartbeatInterval?.toString() || "");
 
   const commitModel = () => {
     const trimmed = localModel.trim();
     if (trimmed && trimmed !== orchestratorModel) {
       onOrchestratorModelChange(trimmed);
+    }
+  };
+
+  const commitHeartbeat = () => {
+    const val = parseInt(localHeartbeat, 10);
+    if (!localHeartbeat || isNaN(val) || val <= 0) {
+      onHeartbeatIntervalChange(null);
+      setLocalHeartbeat("");
+    } else {
+      onHeartbeatIntervalChange(Math.min(val, 3600));
     }
   };
 
@@ -101,6 +116,20 @@ export function ConversationControls({
         <Gauge className="h-3 w-3 text-neon-yellow" />
         <Label className="font-pixel text-[8px] text-neon-yellow uppercase">Slow</Label>
         <Switch checked={isSlow} onCheckedChange={onSlowChange} disabled={disabled} />
+      </div>
+      <div className="flex items-center gap-2">
+        <Heart className="h-3 w-3 text-neon-pink" />
+        <Label className="font-pixel text-[8px] text-neon-pink uppercase">Beat</Label>
+        <Input
+          value={localHeartbeat}
+          onChange={(e) => setLocalHeartbeat(e.target.value.replace(/[^0-9]/g, ""))}
+          onBlur={commitHeartbeat}
+          onKeyDown={(e) => { if (e.key === "Enter") commitHeartbeat(); }}
+          className="h-7 w-16 text-sm font-retro text-center"
+          placeholder="off"
+          disabled={disabled}
+        />
+        <span className="font-pixel text-[7px] text-muted-foreground uppercase">sec</span>
       </div>
     </div>
   );

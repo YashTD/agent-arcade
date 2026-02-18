@@ -38,6 +38,7 @@ export type SSEEventType =
   | "approval_required"
   | "error"
   | "conversation_paused"
+  | "conversation_resting"
   | "conversation_complete";
 
 export interface SSEEvent {

@@ -35,6 +35,7 @@ export class ConversationEngine {
   private client: OpenAI;
   private sseWriter: SSEWriter;
   private abortSignal?: AbortSignal;
+  private restRequested = false;
 
   constructor(
     session: Session,
@@ -182,6 +183,10 @@ export class ConversationEngine {
         i === 0 ? targetAgentId : undefined
       );
       if (!result) break;
+      if (this.restRequested) {
+        this.sseWriter.write("conversation_resting", {});
+        return;
+      }
       // Small delay between turns
       if (i < count - 1) {
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -197,6 +202,10 @@ export class ConversationEngine {
     while (!this.abortSignal?.aborted) {
       const result = await this.executeTurn();
       if (!result) break;
+      if (this.restRequested) {
+        this.sseWriter.write("conversation_resting", {});
+        return;
+      }
       // 1 second delay between turns
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
@@ -314,6 +323,7 @@ export class ConversationEngine {
     const toolContext: ToolContext = {
       sessionId: this.session.id,
       browserManager: getBrowserManager(),
+      requestRest: () => { this.restRequested = true; },
     };
 
     let currentToolCalls = toolCalls;

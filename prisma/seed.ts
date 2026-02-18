@@ -508,6 +508,30 @@ return { slept: seconds };
 `,
     isPredefined: true,
   },
+  {
+    name: "rest",
+    toolGroup: null,
+    description:
+      "Pause the conversation loop so the agent can rest. The conversation will stop after the current turn. If a heartbeat interval is configured on the session, the conversation will automatically resume after that interval. Use this when you want to take a break, wait for external events, or create a periodic check-in cycle.",
+    parameters: {
+      type: "object",
+      properties: {
+        reason: {
+          type: "string",
+          description: "Optional reason for resting (e.g., 'waiting for new emails', 'cooling down after rate limit')",
+        },
+      },
+      required: [],
+    },
+    implementation: `
+if (context.requestRest) {
+  context.requestRest();
+}
+const reason = params.reason || "No reason specified";
+return { status: "resting", reason, message: "Conversation will pause after this turn." };
+`,
+    isPredefined: true,
+  },
   // ─── Moltbook Social Network Tools ───
   {
     name: "moltbook_register",

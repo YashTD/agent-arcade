@@ -11,6 +11,7 @@ const updateSessionSchema = z.object({
   isInfinite: z.boolean().optional(),
   isSlow: z.boolean().optional(),
   orchestratorModel: z.string().min(1).optional(),
+  heartbeatInterval: z.number().int().min(0).max(3600).nullable().optional(),
 });
 
 export async function GET(
@@ -55,6 +56,11 @@ export async function PATCH(
 
     const body = await request.json();
     const data = updateSessionSchema.parse(body);
+
+    // Normalize heartbeatInterval: 0 means off (null)
+    if (data.heartbeatInterval === 0) {
+      data.heartbeatInterval = null;
+    }
 
     const updated = await prisma.session.update({
       where: { id: sessionId },

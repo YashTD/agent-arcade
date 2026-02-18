@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState, use, useEffect, useRef } from "react";
 import { useSession, useCreateAgent, useUpdateAgent, useDeleteAgent, useUpdateSession } from "@/hooks/use-sessions";
 import { useMessages } from "@/hooks/use-messages";
 import { useTools } from "@/hooks/use-tools";
@@ -49,6 +49,29 @@ export default function SessionPage({ params }: { params: Promise<{ sessionId: s
   const { collapsedAgents, toggleAgentCollapsed, showAgentColumns, setShowAgentColumns, showToolCalls, setShowToolCalls } = useUIStore();
   const { toast } = useToast();
   const { data: templates = [] } = useAgentTemplates();
+
+  // Heartbeat auto-resume: track isRunning via ref to avoid stale closures
+  const isRunningRef = useRef(isRunning);
+  useEffect(() => {
+    isRunningRef.current = isRunning;
+  }, [isRunning]);
+
+  useEffect(() => {
+    const interval = session?.heartbeatInterval;
+    if (!interval || interval <= 0) return;
+
+    const timer = setInterval(() => {
+      if (!isRunningRef.current) {
+        if (session.isInfinite) {
+          startConversation({ infinite: true });
+        } else {
+          startConversation({ turns: 1 });
+        }
+      }
+    }, interval * 1000);
+
+    return () => clearInterval(timer);
+  }, [session?.heartbeatInterval, session?.isInfinite, startConversation]);
 
   const [addAgentOpen, setAddAgentOpen] = useState(false);
   const [newAgent, setNewAgent] = useState({ name: "", model: "anthropic/claude-haiku-4.5", systemPrompt: "" });
@@ -149,11 +172,13 @@ export default function SessionPage({ params }: { params: Promise<{ sessionId: s
         isInfinite={session.isInfinite}
         isSlow={session.isSlow}
         orchestratorModel={session.orchestratorModel}
+        heartbeatInterval={session.heartbeatInterval ?? null}
         onTurnOrderChange={(v) => handleSessionUpdate({ turnOrder: v })}
         onMemoryStrategyChange={(v) => handleSessionUpdate({ memoryStrategy: v })}
         onInfiniteChange={(v) => handleSessionUpdate({ isInfinite: v })}
         onSlowChange={(v) => handleSessionUpdate({ isSlow: v })}
         onOrchestratorModelChange={(v) => handleSessionUpdate({ orchestratorModel: v })}
+        onHeartbeatIntervalChange={(v) => handleSessionUpdate({ heartbeatInterval: v })}
         disabled={isRunning}
       />
 
