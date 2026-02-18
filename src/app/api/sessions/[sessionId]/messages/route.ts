@@ -24,3 +24,28 @@ export async function GET(
 
   return NextResponse.json(messages);
 }
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ sessionId: string }> }
+) {
+  const { sessionId } = await params;
+
+  const session = await prisma.session.findUnique({
+    where: { id: sessionId },
+  });
+  if (!session) {
+    return NextResponse.json({ error: "Session not found" }, { status: 404 });
+  }
+
+  await prisma.message.deleteMany({
+    where: { sessionId },
+  });
+
+  // Also clear any conversation summaries
+  await prisma.conversationSummary.deleteMany({
+    where: { sessionId },
+  });
+
+  return NextResponse.json({ success: true });
+}

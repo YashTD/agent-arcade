@@ -2,7 +2,7 @@
 
 import { useState, use, useEffect, useRef } from "react";
 import { useSession, useCreateAgent, useUpdateAgent, useDeleteAgent, useUpdateSession } from "@/hooks/use-sessions";
-import { useMessages } from "@/hooks/use-messages";
+import { useMessages, useClearMessages } from "@/hooks/use-messages";
 import { useTools } from "@/hooks/use-tools";
 import { useSSE } from "@/hooks/use-sse";
 import { useConversationStore } from "@/stores/conversation-store";
@@ -44,6 +44,7 @@ export default function SessionPage({ params }: { params: Promise<{ sessionId: s
   const updateAgent = useUpdateAgent(sessionId);
   const deleteAgent = useDeleteAgent(sessionId);
   const updateSession = useUpdateSession();
+  const clearMessages = useClearMessages(sessionId);
   const { startConversation, stopConversation } = useSSE(sessionId);
   const { isRunning } = useConversationStore();
   const { collapsedAgents, toggleAgentCollapsed, showAgentColumns, setShowAgentColumns, showToolCalls, setShowToolCalls } = useUIStore();
@@ -179,6 +180,12 @@ export default function SessionPage({ params }: { params: Promise<{ sessionId: s
         onSlowChange={(v) => handleSessionUpdate({ isSlow: v })}
         onOrchestratorModelChange={(v) => handleSessionUpdate({ orchestratorModel: v })}
         onHeartbeatIntervalChange={(v) => handleSessionUpdate({ heartbeatInterval: v })}
+        onClearHistory={() => {
+          if (confirm("Clear all conversation history?")) {
+            clearMessages.mutate();
+          }
+        }}
+        clearingHistory={clearMessages.isPending}
         disabled={isRunning}
       />
 

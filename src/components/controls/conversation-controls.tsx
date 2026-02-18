@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
-import { Cpu, Brain, Repeat, Gauge, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Cpu, Brain, Repeat, Gauge, Heart, Trash2 } from "lucide-react";
 
 interface ConversationControlsProps {
   turnOrder: string;
@@ -26,6 +27,8 @@ interface ConversationControlsProps {
   onSlowChange: (value: boolean) => void;
   onOrchestratorModelChange: (value: string) => void;
   onHeartbeatIntervalChange: (value: number | null) => void;
+  onClearHistory?: () => void;
+  clearingHistory?: boolean;
   disabled?: boolean;
 }
 
@@ -41,6 +44,8 @@ export function ConversationControls({
   onInfiniteChange,
   onSlowChange,
   onOrchestratorModelChange,
+  onClearHistory,
+  clearingHistory,
   onHeartbeatIntervalChange,
   disabled,
 }: ConversationControlsProps) {
@@ -131,6 +136,20 @@ export function ConversationControls({
         />
         <span className="font-pixel text-[7px] text-muted-foreground uppercase">sec</span>
       </div>
+      {onClearHistory && (
+        <div className="ml-auto">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 text-neon-red hover:text-red-400 hover:bg-red-950/30"
+            onClick={onClearHistory}
+            disabled={disabled || clearingHistory}
+          >
+            <Trash2 className="h-3 w-3 mr-1" />
+            <span className="font-pixel text-[8px] uppercase">Clear</span>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
